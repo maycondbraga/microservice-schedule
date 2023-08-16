@@ -26,44 +26,4 @@ public class PacientModel {
 
     @Column(name = "DS_EMAIL")
     private String Email;
-
-    public Long getIdPacient() {
-        return IdPacient;
-    }
-
-    public void setIdPacient(Long idPacient) {
-        IdPacient = idPacient;
-    }
-
-    public String getFirstName() {
-        return FirstName;
-    }
-
-    public void setFirstName(String firstName) {
-        FirstName = firstName;
-    }
-
-    public String getLastName() {
-        return LastName;
-    }
-
-    public void setLastName(String lastName) {
-        LastName = lastName;
-    }
-
-    public String getCpf() {
-        return Cpf;
-    }
-
-    public void setCpf(String cpf) {
-        Cpf = cpf;
-    }
-
-    public String getEmail() {
-        return Email;
-    }
-
-    public void setEmail(String email) {
-        Email = email;
-    }
 }
