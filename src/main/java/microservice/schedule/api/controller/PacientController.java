@@ -1,6 +1,9 @@
 package microservice.schedule.api.controller;
 
 import lombok.RequiredArgsConstructor;
+import microservice.schedule.api.dtos.request.PacientRequest;
+import microservice.schedule.api.dtos.response.PacientResponse;
+import microservice.schedule.api.mapper.PacientMapper;
 import microservice.schedule.domain.entities.PacientModel;
 import microservice.schedule.domain.service.PacientService;
 import microservice.schedule.exception.BusinessException;
@@ -9,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @RestController
@@ -18,14 +22,37 @@ public class PacientController {
     private final PacientService _pacientService;
 
     @PostMapping
-    public ResponseEntity<PacientModel> save(@RequestBody PacientModel pacient) throws BusinessException {
-        PacientModel pacientSaved = _pacientService.save(pacient);
-        return ResponseEntity.status(HttpStatus.CREATED).body(pacientSaved);
+    public ResponseEntity<PacientResponse> save(@RequestBody PacientRequest request) throws BusinessException {
+        PacientModel pacientSaved = _pacientService.save(PacientMapper.toPacientModel(request));
+        return ResponseEntity.status(HttpStatus.CREATED).body(PacientMapper.toPacientResponse(pacientSaved));
     }
 
     @GetMapping
-    public ResponseEntity<List<PacientModel>> getAll(){
-        List<PacientModel> allPacients = _pacientService.getAll();
-        return ResponseEntity.status(HttpStatus.OK).body(allPacients);
+    public ResponseEntity<List<PacientResponse>> getAll(){
+        List<PacientResponse> pacientResponseList = PacientMapper.toPacientResponseList(_pacientService.getAll());
+        return ResponseEntity.status(HttpStatus.OK).body(pacientResponseList);
+    }
+
+    @GetMapping("/{idPacient}")
+    public ResponseEntity<PacientResponse> getById(@PathVariable Long idPacient){
+        Optional<PacientModel> pacient = _pacientService.getById(idPacient);
+
+        if(pacient.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(PacientMapper.toPacientResponse(pacient.get()));
+    }
+
+    @PutMapping
+    public ResponseEntity<PacientResponse> update(@RequestBody PacientRequest request) throws BusinessException {
+        PacientModel updatedPacient = _pacientService.save(PacientMapper.toPacientModel(request));
+        return ResponseEntity.status(HttpStatus.OK).body(PacientMapper.toPacientResponse(updatedPacient));
+    }
+
+    @DeleteMapping("/{idPacient}")
+    public ResponseEntity<PacientModel> delete(@PathVariable Long idPacient){
+        _pacientService.delete(idPacient);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
