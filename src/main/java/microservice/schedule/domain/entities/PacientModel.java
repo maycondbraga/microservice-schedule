@@ -13,17 +13,17 @@ public class PacientModel {
     @Id
     @Column(name = "ID_PACIENT")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long IdPacient;
+    private Long idPacient;
 
     @Column(name = "DS_FIRST_NAME")
-    private String FirstName;
+    private String firstName;
 
     @Column(name = "DS_LAST_NAME")
-    private String LastName;
+    private String lastName;
 
     @Column(name = "DS_CPF")
-    private String Cpf;
+    private String cpf;
 
     @Column(name = "DS_EMAIL")
-    private String Email;
+    private String email;
 }
