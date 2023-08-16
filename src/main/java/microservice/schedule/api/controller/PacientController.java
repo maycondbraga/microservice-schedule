@@ -20,16 +20,17 @@ import java.util.Optional;
 public class PacientController {
 
     private final PacientService _pacientService;
+    private final PacientMapper _mapper;
 
     @PostMapping
     public ResponseEntity<PacientResponse> save(@RequestBody PacientRequest request) throws BusinessException {
-        PacientModel pacientSaved = _pacientService.save(PacientMapper.toPacientModel(request));
-        return ResponseEntity.status(HttpStatus.CREATED).body(PacientMapper.toPacientResponse(pacientSaved));
+        PacientModel pacientSaved = _pacientService.save(_mapper.toPacientModel(request));
+        return ResponseEntity.status(HttpStatus.CREATED).body(_mapper.toPacientResponse(pacientSaved));
     }
 
     @GetMapping
     public ResponseEntity<List<PacientResponse>> getAll(){
-        List<PacientResponse> pacientResponseList = PacientMapper.toPacientResponseList(_pacientService.getAll());
+        List<PacientResponse> pacientResponseList = _mapper.toPacientResponseList(_pacientService.getAll());
         return ResponseEntity.status(HttpStatus.OK).body(pacientResponseList);
     }
 
@@ -41,13 +42,13 @@ public class PacientController {
             return ResponseEntity.notFound().build();
         }
 
-        return ResponseEntity.status(HttpStatus.OK).body(PacientMapper.toPacientResponse(pacient.get()));
+        return ResponseEntity.status(HttpStatus.OK).body(_mapper.toPacientResponse(pacient.get()));
     }
 
-    @PutMapping
-    public ResponseEntity<PacientResponse> update(@RequestBody PacientRequest request) throws BusinessException {
-        PacientModel updatedPacient = _pacientService.save(PacientMapper.toPacientModel(request));
-        return ResponseEntity.status(HttpStatus.OK).body(PacientMapper.toPacientResponse(updatedPacient));
+    @PutMapping("/{idPacient}")
+    public ResponseEntity<PacientResponse> update(@PathVariable Long idPacient, @RequestBody PacientRequest request) throws BusinessException {
+        PacientModel updatedPacient = _pacientService.update(idPacient, _mapper.toPacientModel(request));
+        return ResponseEntity.status(HttpStatus.OK).body(_mapper.toPacientResponse(updatedPacient));
     }
 
     @DeleteMapping("/{idPacient}")

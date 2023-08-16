@@ -33,6 +33,17 @@ public class PacientService {
         return _pacientRepository.save(pacient);
     }
 
+    public PacientModel update(Long idPacient, PacientModel pacient){
+        Optional<PacientModel> optPacient = this.getById(idPacient);
+
+        if(optPacient.isEmpty()){
+            throw new BusinessException("Pacient not exists");
+        }
+
+        pacient.setIdPacient(idPacient);
+        return save(pacient);
+    }
+
     public List<PacientModel> getAll(){
         return _pacientRepository.findAll();
     }

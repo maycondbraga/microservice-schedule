@@ -1,38 +1,32 @@
 package microservice.schedule.api.mapper;
 
+import lombok.RequiredArgsConstructor;
 import microservice.schedule.api.dtos.request.PacientRequest;
 import microservice.schedule.api.dtos.response.PacientResponse;
 import microservice.schedule.domain.entities.PacientModel;
+import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
+@Component
+@RequiredArgsConstructor
 public class PacientMapper {
-    public static PacientModel toPacientModel(PacientRequest request){
-        PacientModel pacient = new PacientModel();
-        pacient.setIdPacient(request.getIdPacient());
-        pacient.setFirstName(request.getFirstName());
-        pacient.setLastName(request.getLastName());
-        pacient.setEmail(request.getEmail());
-        pacient.setCpf(request.getCpf());
-        return pacient;
+
+    private final ModelMapper _mapper;
+
+    public PacientModel toPacientModel(PacientRequest request){
+        return _mapper.map(request, PacientModel.class);
     }
 
-    public static PacientResponse toPacientResponse(PacientModel pacient){
-        PacientResponse response = new PacientResponse();
-        response.setIdPacient(pacient.getIdPacient());
-        response.setFirstName(pacient.getFirstName());
-        response.setLastName(pacient.getLastName());
-        response.setEmail(pacient.getEmail());
-        response.setCpf(pacient.getCpf());
-        return response;
+    public PacientResponse toPacientResponse(PacientModel pacient){
+        return _mapper.map(pacient, PacientResponse.class);
     }
 
-    public static List<PacientResponse> toPacientResponseList(List<PacientModel> pacientList){
-        List<PacientResponse> responses = new ArrayList<>();
-        for (PacientModel pacient : pacientList){
-            responses.add(toPacientResponse(pacient));
-        }
-        return responses;
+    public List<PacientResponse> toPacientResponseList(List<PacientModel> pacientList){
+        return pacientList.stream()
+                .map(this::toPacientResponse)
+                .collect(Collectors.toList());
     }
 }

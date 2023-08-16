@@ -10,7 +10,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PacientRequest {
-    private Long idPacient;
     private String firstName;
     private String lastName;
     private String cpf;
