@@ -18,29 +18,13 @@ public class PacientService {
     private final PacientRepository _pacientRepository;
 
     public PacientModel save(PacientModel pacient) throws BusinessException {
-
-        boolean cpfJaCadastrado = false;
-        Optional<PacientModel> optPacient = _pacientRepository.findByCpf(pacient.getCpf());
-
-        if(optPacient.isPresent() && !optPacient.get().getIdPacient().equals(pacient.getIdPacient())){
-            cpfJaCadastrado = true;
-        }
-
-        if(cpfJaCadastrado){
-            throw new BusinessException("Cpf already exists");
-        }
-
+        isValidForSave(pacient);
         return _pacientRepository.save(pacient);
     }
 
-    public PacientModel update(Long idPacient, PacientModel pacient){
-        Optional<PacientModel> optPacient = this.getById(idPacient);
-
-        if(optPacient.isEmpty()){
-            throw new BusinessException("Pacient not exists");
-        }
-
+    public PacientModel update(Long idPacient, PacientModel pacient) throws BusinessException {
         pacient.setIdPacient(idPacient);
+        isValidForUpdate(pacient);
         return save(pacient);
     }
 
@@ -55,4 +39,27 @@ public class PacientService {
     public void delete(Long idPacient){
         _pacientRepository.deleteById(idPacient);
     }
+
+    //region Private Methods
+    private void isValidForUpdate(PacientModel pacient){
+        Optional<PacientModel> optPacient = this.getById(pacient.getIdPacient());
+
+        if(optPacient.isEmpty())
+            throw new BusinessException("Pacient not exists");
+
+        isValidForSave(pacient);
+    }
+
+    private void isValidForSave(PacientModel pacient){
+        Optional<PacientModel> optValidCpf = _pacientRepository.findByCpf(pacient.getCpf());
+
+        if(optValidCpf.isPresent() && !optValidCpf.get().getIdPacient().equals(pacient.getIdPacient()))
+            throw new BusinessException("Cpf already exists");
+
+        Optional<PacientModel> optValidEmail = _pacientRepository.findByEmail(pacient.getEmail());
+
+        if(optValidEmail.isPresent() && !optValidEmail.get().getIdPacient().equals(pacient.getIdPacient()))
+            throw new BusinessException("Email already exists");
+    }
+    //endregion Private Methods
 }
