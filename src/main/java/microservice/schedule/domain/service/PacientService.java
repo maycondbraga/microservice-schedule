@@ -20,9 +20,9 @@ public class PacientService {
     public PacientModel save(PacientModel pacient) throws BusinessException {
 
         boolean cpfJaCadastrado = false;
-        Optional<PacientModel> byCpf = _pacientRepository.findByCpf(pacient.getCpf());
+        Optional<PacientModel> optPacient = _pacientRepository.findByCpf(pacient.getCpf());
 
-        if(byCpf.isPresent() && !byCpf.get().getIdPacient().equals(pacient.getIdPacient())){
+        if(optPacient.isPresent() && !optPacient.get().getIdPacient().equals(pacient.getIdPacient())){
             cpfJaCadastrado = true;
         }
 

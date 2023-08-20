@@ -1,5 +1,6 @@
 package microservice.schedule.api.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import microservice.schedule.api.dtos.request.PacientRequest;
 import microservice.schedule.api.dtos.response.PacientResponse;
@@ -23,7 +24,7 @@ public class PacientController {
     private final PacientMapper _mapper;
 
     @PostMapping
-    public ResponseEntity<PacientResponse> save(@RequestBody PacientRequest request) throws BusinessException {
+    public ResponseEntity<PacientResponse> save(@Valid @RequestBody PacientRequest request) throws BusinessException {
         PacientModel pacientSaved = _pacientService.save(_mapper.toPacientModel(request));
         return ResponseEntity.status(HttpStatus.CREATED).body(_mapper.toPacientResponse(pacientSaved));
     }
