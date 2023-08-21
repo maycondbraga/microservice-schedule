@@ -28,37 +28,37 @@ public class PacientService {
         return save(pacient);
     }
 
-    public List<PacientModel> getAll(){
+    public List<PacientModel> getAll() {
         return _pacientRepository.findAll();
     }
 
-    public Optional<PacientModel> getById(Long idPacient){
+    public Optional<PacientModel> getById(Long idPacient) {
         return _pacientRepository.findById(idPacient);
     }
 
-    public void delete(Long idPacient){
+    public void delete(Long idPacient) {
         _pacientRepository.deleteById(idPacient);
     }
 
     //region Private Methods
-    private void isValidForUpdate(PacientModel pacient){
+    private void isValidForUpdate(PacientModel pacient) {
         Optional<PacientModel> optPacient = this.getById(pacient.getIdPacient());
 
-        if(optPacient.isEmpty())
+        if (optPacient.isEmpty())
             throw new BusinessException("Pacient not exists");
 
         isValidForSave(pacient);
     }
 
-    private void isValidForSave(PacientModel pacient){
+    private void isValidForSave(PacientModel pacient) {
         Optional<PacientModel> optValidCpf = _pacientRepository.findByCpf(pacient.getCpf());
 
-        if(optValidCpf.isPresent() && !optValidCpf.get().getIdPacient().equals(pacient.getIdPacient()))
+        if (optValidCpf.isPresent() && !optValidCpf.get().getIdPacient().equals(pacient.getIdPacient()))
             throw new BusinessException("Cpf already exists");
 
         Optional<PacientModel> optValidEmail = _pacientRepository.findByEmail(pacient.getEmail());
 
-        if(optValidEmail.isPresent() && !optValidEmail.get().getIdPacient().equals(pacient.getIdPacient()))
+        if (optValidEmail.isPresent() && !optValidEmail.get().getIdPacient().equals(pacient.getIdPacient()))
             throw new BusinessException("Email already exists");
     }
     //endregion Private Methods

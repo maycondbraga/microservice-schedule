@@ -15,17 +15,18 @@ public class ScheduleModel {
     @Id
     @Column(name = "ID_SCHEDULE")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long IdSchedule;
+    private Long idSchedule;
 
     @Column(name = "DS_DESCRIPTION")
-    private String Description;
+    private String description;
 
     @Column(name = "DT_SCHEDULING")
-    private LocalDateTime DateScheduling;
+    private LocalDateTime dateScheduling;
 
     @Column(name = "DT_SCHEDULE_CREATED")
-    private LocalDateTime DateScheduleCreated;
+    private LocalDateTime dateScheduleCreated;
 
     @ManyToOne
-    private PacientModel Pacient;
+    @Column(name = "ID_PACIENT")
+    private PacientModel pacient;
 }
