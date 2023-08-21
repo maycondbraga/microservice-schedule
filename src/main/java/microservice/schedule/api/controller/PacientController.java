@@ -53,8 +53,8 @@ public class PacientController {
     }
 
     @DeleteMapping("/{idPacient}")
-    public ResponseEntity<PacientModel> delete(@PathVariable Long idPacient){
+    public ResponseEntity<Void> delete(@PathVariable Long idPacient){
         _pacientService.delete(idPacient);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 }
