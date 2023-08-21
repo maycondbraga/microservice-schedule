@@ -27,6 +27,6 @@ public class ScheduleModel {
     private LocalDateTime dateScheduleCreated;
 
     @ManyToOne
-    @Column(name = "ID_PACIENT")
+    @JoinColumn(name = "ID_PACIENT")
     private PacientModel pacient;
 }
